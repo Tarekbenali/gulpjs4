@@ -63,8 +63,9 @@ function custom_sass() {
       .on("error", sass.logError)
       .pipe(
         autoprefixer({
-          browsers: ["last 2 versions"],
-          cascade: false
+         overrideBrowserslist: ["last 2 versions"],
+           flexbox: `no-2009` ,
+           cascade: false
         })
       )
       .pipe(cleanCSS())
