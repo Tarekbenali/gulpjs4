@@ -32,8 +32,28 @@ const paths = {
     Btsrp_Js: "node_modules/bootstrap/dist/js/bootstrap.min.js",
     Btsrp_Jq: "node_modules/jquery/dist/jquery.min.js",
     Btsrp_popr: "node_modules/popper.js/dist/umd/popper.min.js"
-  }
+  },
+  fonts: {
+    src:  [
+      "./node_modules/@fortawesome/fontawesome-free/**/*",
+      "!./node_modules/@fortawesome/fontawesome-free/{less,less/*}",
+      "!./node_modules/@fortawesome/fontawesome-free/{scss,scss/*}",
+      "!./node_modules/@fortawesome/fontawesome-free/.*",
+      "!./node_modules/@fortawesome/fontawesome-free/*.{txt,json,md}"
+    ],
+    dest:"./dist/fonts/font-awesome"
+  },
+  
 };
+
+// Fonts Awesome
+function custom_fonts() {
+  return (
+    gulp
+    .src(paths.fonts.src)
+    .pipe(gulp.dest(paths.fonts.dest))
+      
+    );}
 
 // BrowserSync init
 function serve(done) {
@@ -63,10 +83,10 @@ function custom_sass() {
       .on("error", sass.logError)
       .pipe(
         autoprefixer({
-         overrideBrowserslist: ["last 2 versions"],
+          overrideBrowserslist: ["last 2 versions"],
            flexbox: `no-2009` ,
            cascade: false
-        })
+      })
       )
       .pipe(cleanCSS())
       .pipe(gulp.dest(paths.css.dest))
@@ -136,6 +156,7 @@ function watch() {
 const build = gulp.series(
     clean,
     custom_js,
+    custom_fonts,
     custom_html,
     custom_sass,
     custom_images,
