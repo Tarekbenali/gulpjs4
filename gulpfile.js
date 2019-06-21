@@ -28,9 +28,9 @@ const paths = {
     dest: "./dist/images",
   },
   bootstrap: {
-    Btsrp_Css: "node_modules/bootstrap/scss/bootstrap.scss",
+    Btsrp_Css: "node_modules/bootstrap/dist/css/bootstrap.min.css",
     Btsrp_Js: "node_modules/bootstrap/dist/js/bootstrap.min.js",
-    Btsrp_Jq: "node_modules/jquery/dist/jquery.min.js",
+    Btsrp_Jq: "node_modules/jquery/dist/jquery.slim.js",
     Btsrp_popr: "node_modules/popper.js/dist/umd/popper.min.js"
   },
   fonts: {
@@ -72,13 +72,21 @@ function reload(done) {
     done();
 }
 
-//Compiling & Moving Custom SASS Files
-function custom_sass() {
+// Moving Css files to dist folder  (Bootstrap css files)
+function move_css() {
   return (
     gulp
       .src([
-        paths.bootstrap.Btsrp_Css,paths.css.src
-      ])
+        paths.bootstrap.Btsrp_Css])
+      .pipe(gulp.dest(paths.css.dest))
+  );
+}
+
+// Moving and compiling sass files 
+function custom_sass() {
+  return (
+    gulp
+      .src(paths.css.src)
       .pipe(sass({ outputStyle: "expanded" }))
       .on("error", sass.logError)
       .pipe(
@@ -93,16 +101,24 @@ function custom_sass() {
   );
 }
 
-//Custom Scripts
-function custom_js() {
+//Moving js files to dist folder (Bootstrap and jquery je files )
+function move_js() {
   return (
     gulp
       .src([
         paths.bootstrap.Btsrp_Js,
         paths.bootstrap.Btsrp_Jq,
-        paths.bootstrap.Btsrp_popr,
-        paths.js.src
+        paths.bootstrap.Btsrp_popr
       ])
+      .pipe(gulp.dest(paths.js.dest))
+  );
+}
+
+//Move and uglify main js files
+function custom_js() {
+  return (
+    gulp
+      .src(paths.js.src)
       .pipe(uglify())
       .pipe(gulp.dest(paths.js.dest))
   );
@@ -122,7 +138,7 @@ function custom_html() {
 }
 
 
-//custom images
+//Moving and minifying images
 function custom_images() {
   return gulp
     .src(paths.images.src)
@@ -138,7 +154,7 @@ function custom_images() {
     .pipe(gulp.dest(paths.images.dest));
 }
 
-// clean ./dist folder 
+// clean dist folder 
 function clean() {
   return del(["dist"]);
 
@@ -155,10 +171,10 @@ function watch() {
 // building files 
 const build = gulp.series(
     clean,
-    custom_js,
+    gulp.parallel(move_js, custom_js),    
     custom_fonts,
     custom_html,
-    custom_sass,
+    gulp.parallel(move_css, custom_sass),
     custom_images,
     gulp.parallel(serve, watch)
 );
