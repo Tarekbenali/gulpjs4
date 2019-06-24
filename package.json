@@ -8,12 +8,34 @@
   "scripts": {
     "start": "gulp"
   },
+   "keywords": [
+    "babel",
+    "transpiler",
+    "imagemin",
+    "Fontawesome",
+    "es2015",
+    "clean-css",
+    "sass",
+    "es2016",
+    "autoprefixer",
+    "htmlmin",
+    "uglify",
+    "Bootstrap",
+    "Del",
+    "browser sync"
+  ],
+  "peerDependencies": {
+    "@babel/core": "^7.0.0"
+  },
   "devDependencies": {
+    "@babel/core": "^7.4.5",
+    "@babel/preset-env": "^7.4.5",
     "@fortawesome/fontawesome-free": "^5.9.0",
     "browser-sync": "^2.26.7",
     "del": "^4.1.1",
     "gulp": "^4.0.2",
     "gulp-autoprefixer": "^6.1.0",
+    "gulp-babel": "^8.0.0",
     "gulp-clean-css": "^4.2.0",
     "gulp-cli": "^2.2.0",
     "gulp-htmlmin": "^5.0.1",
