@@ -7,7 +7,9 @@ const gulp = require("gulp"),
       del = require("del"),
       htmlmin = require("gulp-htmlmin"),
       imagemin = require("gulp-imagemin"),
+        babel = require("gulp-babel"),
       uglify = require("gulp-uglify");
+      
 
 //Declaring Paths
 const paths = {
@@ -114,11 +116,14 @@ function move_js() {
   );
 }
 
-//Move and uglify main js files
+//Move,transpile and minify js files
 function custom_js() {
   return (
     gulp
       .src(paths.js.src)
+      .pipe(babel({
+        presets: ['@babel/preset-env']
+      }))
       .pipe(uglify())
       .pipe(gulp.dest(paths.js.dest))
   );
@@ -138,7 +143,7 @@ function custom_html() {
 }
 
 
-//Moving and minifying images
+//custom images
 function custom_images() {
   return gulp
     .src(paths.images.src)
@@ -154,7 +159,7 @@ function custom_images() {
     .pipe(gulp.dest(paths.images.dest));
 }
 
-// clean dist folder 
+// clean ./dist folder 
 function clean() {
   return del(["dist"]);
 
@@ -180,3 +185,6 @@ const build = gulp.series(
 );
 gulp.task(build);
 gulp.task("default", build);
+
+
+ 
